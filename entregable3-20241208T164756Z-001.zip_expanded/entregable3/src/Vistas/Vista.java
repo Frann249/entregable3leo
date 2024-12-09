@@ -63,5 +63,8 @@ public class Vista extends JFrame {
 	public void setCotizaciones(PanelCotizaciones cotizaciones) {
 		this.cotizaciones = cotizaciones;
 	}
-
+	// Método para obtener el panel de "Mis Activos"
+    public PanelMisActivos getMisActivos() {
+        return activos;
+    }
 }

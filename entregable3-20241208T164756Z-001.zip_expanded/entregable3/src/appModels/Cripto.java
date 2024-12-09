@@ -12,6 +12,11 @@ public class Cripto extends Moneda {
      * @param moneda La moneda de destino a la que se va a convertir.
      * @return El monto convertido en la moneda de destino.
      */
+	public Cripto(int ID,String nombre_icono, String nombre, String nomenclatura, double valor_Dolar, double volatililidad, double stock){
+		super(ID,nombre_icono, nombre, nomenclatura, valor_Dolar);
+		this.volatililidad = volatililidad;
+		this.stock=stock;
+	}
 	public Cripto(String nombre_icono, String nombre, String nomenclatura, double valor_Dolar, double volatililidad, double stock){
 		super(nombre_icono, nombre, nomenclatura, valor_Dolar);
 		this.volatililidad = volatililidad;

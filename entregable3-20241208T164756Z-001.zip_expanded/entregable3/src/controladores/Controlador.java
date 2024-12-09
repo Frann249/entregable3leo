@@ -31,7 +31,8 @@ public class Controlador {
 		for(JButton botonAct : buttonsList) {
 			botonAct.addActionListener(new ListenerCompra());
 		}
-		
+		vista.getMisActivos().getBtnGenerarDatos().addActionListener(new ListenerMisActivos());
+        vista.getMisActivos().getBtnExportarCSV().addActionListener(new ListenerMisActivos());
 		vista.mostrarPanel("ACTIVOS");
 		vista.setVisible(true);
 	}
@@ -110,4 +111,23 @@ public class Controlador {
 		}
 		
 	}
+	
+	// Listener específico para el panel "Mis Activos"
+    class ListenerMisActivos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+
+            if (command.equals("GENERAR_DATOS")) {
+                // Lógica para generar datos de prueba
+                vista.getMisActivos().generarDatosDePrueba();
+            }
+
+            if (command.equals("EXPORTAR_CSV")) {
+                // Lógica para exportar los datos como CSV
+                vista.getMisActivos().exportarComoCSV();
+            }
+        }
+    }
+	
 }

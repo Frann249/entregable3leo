@@ -4,6 +4,7 @@ package appModels;
  */
 
 public abstract class Moneda {
+	private int ID;
 	private String nombre;
 	private String nomenclatura;
 	private double valor_Dolar;
@@ -16,6 +17,13 @@ public abstract class Moneda {
      * @param moneda La moneda de destino a la que se va a convertir.
      * @return El monto convertido en la moneda de destino.
      */
+	Moneda(int ID,String nombre_icono,String nombre, String nomenclatura, double valor_Dolar){
+		this.ID = ID;
+		this.nombre = nombre;
+		this.nomenclatura= nomenclatura;
+		this.valor_Dolar= valor_Dolar;
+		this.nombre_icono = nombre_icono;
+	}
 	Moneda(String nombre_icono,String nombre, String nomenclatura, double valor_Dolar){
 		this.nombre = nombre;
 		this.nomenclatura= nomenclatura;
@@ -76,5 +84,11 @@ public abstract class Moneda {
 	 */
 	public void setNombre_icono(String nombre_icono) {
 		this.nombre_icono = nombre_icono;
+	}
+	public int getID() {
+		return ID;
+	}
+	public void setID(int iD) {
+		ID = iD;
 	}
 }

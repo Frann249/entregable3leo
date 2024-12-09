@@ -64,17 +64,27 @@ public class ActivoDAOjdbc implements ActivoDAO{
 	public List<Activo> listarActivos(){
 		String sql = "SELECT * FROM ACTIVO_CRIPTO UNION ALL SELECT * FROM ACTIVO_FIAT ";
       	Connection con = null;
-      	List<Activo> lista = new LinkedList<Activo>();
+      	List<Activo> lista = null;
       	try {
         	con = MyConnection.getCon();
           	Statement sent = con.createStatement();
-        	ResultSet resul = sent.executeQuery(sql);    
-        	while(resul.next()) {
-          		String nomenclatura = resul.getString("NOMENCLATURA");
+        	ResultSet resul = sent.executeQuery(sql);  
+        	 if (!resul.next()){
+           		resul.close();
+           		sent.close();
+           		return lista; // error no se encontraron resultados
+         	}else {
+              	lista = new LinkedList<Activo>();
+          		do {
+        		int ID = resul.getInt("ID");
+        		int ID_USUARIO = resul.getInt("ID_USUARIO");
+        		int ID_MONEDA = resul.getInt("ID_MONEDA");
+//          		String nomenclatura = resul.getString("NOMENCLATURA");
           		double cantidad = resul.getDouble("CANTIDAD");
-          		Activo activo = new Activo(nomenclatura, cantidad);
+          		Activo activo = new Activo(ID, ID_USUARIO, ID_MONEDA,cantidad);
           		lista.add(activo);
-          	} 
+          		} while( resul.next() ); 
+          	}
         	resul.close();
        		sent.close();
         	return lista; // La función finalizó con éxito          	
@@ -147,6 +157,9 @@ public class ActivoDAOjdbc implements ActivoDAO{
           		sent.close();
           		return null;
         	}
+//            int ID = resul.getInt("ID");
+//    		int ID_USUARIO = resul.getInt("ID_USUARIO");
+//    		int ID_MONEDA = resul.getInt("ID_MONEDA");
             String nomenclatura = resul.getString("NOMENCLATURA");
           	double cantidad = resul.getDouble("CANTIDAD");
           	Activo activo = new Activo(nomenclatura, cantidad);

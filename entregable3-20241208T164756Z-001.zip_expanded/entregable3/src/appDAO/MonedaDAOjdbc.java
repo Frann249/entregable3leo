@@ -110,6 +110,7 @@ public class MonedaDAOjdbc implements MonedaDAO{
           			char car = valor.charAt(0);
           			
           			if ( car == 'C') {
+          				int ID = resul.getInt("ID");
           				String nombre_icono = resul.getString("NOMBRE_ICONO");
           				String nombre = resul.getString("NOMBRE");
           	          	String nomenclatura = resul.getString("NOMENCLATURA");
@@ -117,16 +118,17 @@ public class MonedaDAOjdbc implements MonedaDAO{
           	          	double volatibilidad = resul.getDouble("VOLATILIDAD");
           	          	double stock = resul.getDouble("STOCK");
           	          	
-          				Cripto c = new Cripto(nombre_icono, nombre, nomenclatura,valorDolar,volatibilidad,stock);
+          				Cripto c = new Cripto(ID,nombre_icono, nombre, nomenclatura,valorDolar,volatibilidad,stock);
           				lista.add(c);
           			}
           			else {
+          				int ID = resul.getInt("ID");
           				String nombre_icono = resul.getString("NOMBRE_ICONO");
           				String nombre = resul.getString("NOMBRE");
           	          	String nomenclatura = resul.getString("NOMENCLATURA");
           	          	double valorDolar = resul.getDouble("VALOR_DOLAR");
           	          	
-          	          	Fiat f = new Fiat(nombre_icono, nombre,nomenclatura,valorDolar);
+          	          	Fiat f = new Fiat(ID,nombre_icono, nombre,nomenclatura,valorDolar);
           	          	lista.add(f);
           			}
           		} while ( resul.next());

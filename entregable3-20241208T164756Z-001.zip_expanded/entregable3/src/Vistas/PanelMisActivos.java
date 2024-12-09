@@ -6,16 +6,28 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import appDAO.ActivoDAOjdbc;
+import appDAO.FactoryDAO;
+import appDAO.MonedaDAOjdbc;
+import appModels.Activo;
+import appModels.Moneda;
 
 public class PanelMisActivos extends JPanel {
 
     private final Font fuenteS = new Font("Arial", Font.PLAIN, 12);
     private final Font fuenteM = new Font("Arial", Font.PLAIN, 16);
     private final Font fuenteL = new Font("Arial", Font.BOLD, 20);
-
+    private JButton btnGenerarDatos;
+    private JButton btnExportarCSV;
+    private JTable tablaCriptos;
     public PanelMisActivos() {
+        
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -23,38 +35,39 @@ public class PanelMisActivos extends JPanel {
         Color colorCeleste = new Color(92, 195, 242);
         Color colorRojo = new Color(255, 69, 58);
         
-	    // Sección superior: Logo, nombre y botón
-	    // Redimensionar el logo del usuario
-	    ImageIcon iconoPerfil = new ImageIcon(new ImageIcon("Logos/perfil.png").getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	    JLabel lblLogoUsuario = new JLabel(iconoPerfil); // Logo usuario
-	
-	    // Etiqueta del nombre
-	    JLabel lblNombreUsuario = new JLabel("Nombre Apellido");
-	    lblNombreUsuario.setFont(fuenteM);
-	
-	    // Botón de cerrar sesión
-	    JButton btnCerrarSesion = new JButton("Cerrar sesión");
-	    btnCerrarSesion.setBackground(colorCeleste);
-	    btnCerrarSesion.setForeground(Color.WHITE);
-	
-	    // Configuración del layout
-	    gbc.insets = new Insets(10, 10, 10, 10);
-	    gbc.anchor = GridBagConstraints.EAST;
-	    gbc.gridx = 1;
-	    gbc.gridy = 0;
-	    this.add(lblLogoUsuario, gbc);
-	
-	    gbc.gridx = 2;
-	    gbc.anchor = GridBagConstraints.WEST;
-	    this.add(lblNombreUsuario, gbc);
-	
-	    gbc.gridx = 2;
-	    gbc.gridy = 1;
-	    gbc.anchor = GridBagConstraints.SOUTH;
-	    this.add(btnCerrarSesion, gbc);
+        // Sección superior: Logo, nombre y botón
+        // Redimensionar el logo del usuario
+        ImageIcon iconoPerfil = new ImageIcon(new ImageIcon("Logos/perfil.png").getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+        JLabel lblLogoUsuario = new JLabel(iconoPerfil); // Logo usuario
+    
+        // Etiqueta del nombre
+        JLabel lblNombreUsuario = new JLabel("Nombre Apellido");
+        lblNombreUsuario.setFont(fuenteM);
+    
+        // Botón de cerrar sesión
+        JButton btnCerrarSesion = new JButton("Cerrar sesión");
+        btnCerrarSesion.setBackground(colorCeleste);
+        btnCerrarSesion.setForeground(Color.WHITE);
+    
+        // Configuración del layout
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        this.add(lblLogoUsuario, gbc);
+    
+        gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        this.add(lblNombreUsuario, gbc);
+    
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        this.add(btnCerrarSesion, gbc);
 
         // Botón Generar Datos de Prueba
-        JButton btnGenerarDatos = new JButton("Generar Datos de Prueba");
+        btnGenerarDatos = new JButton("Generar Datos de Prueba");
+        btnGenerarDatos.setActionCommand("GENERAR_DATOS");
         btnGenerarDatos.setBackground(colorRojo);
         btnGenerarDatos.setForeground(Color.WHITE);
         btnGenerarDatos.setFont(fuenteS);
@@ -79,15 +92,11 @@ public class PanelMisActivos extends JPanel {
         gbc.gridx = 1;
         this.add(lblBalance, gbc);
 
-        // Tabla de Criptos
+     // Inicializa la tabla
         String[] columnas = {"", "Cripto", "Monto"};
-        Object[][] datos = {
-            {new ImageIcon("path/to/bitcoin-icon.png"), "Bitcoin", "$6960.39"},
-            {new ImageIcon("path/to/dogecoin-icon.png"), "Dogecoin", "$30.39"},
-            {new ImageIcon("path/to/peso-icon.png"), "Peso Argentino", "ARS 1000000"}
-        };
+        Object[][] datos = {};  // Inicializa con datos vacíos
 
-        JTable tablaCriptos = new JTable(new DefaultTableModel(datos, columnas) {
+        tablaCriptos = new JTable(new DefaultTableModel(datos, columnas) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 return columnIndex == 0 ? ImageIcon.class : String.class;
@@ -105,7 +114,8 @@ public class PanelMisActivos extends JPanel {
         this.add(scrollTabla, gbc);
 
         // Botón Exportar CSV
-        JButton btnExportarCSV = new JButton("Exportar como CSV");
+        btnExportarCSV = new JButton("Exportar como CSV");
+        btnExportarCSV.setActionCommand("EXPORTAR_CSV");
         btnExportarCSV.setBackground(colorCeleste);
         btnExportarCSV.setForeground(Color.WHITE);
 
@@ -115,7 +125,7 @@ public class PanelMisActivos extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         this.add(btnExportarCSV, gbc);
         
-     // Botones inferiores
+        // Botones inferiores
         JButton btnMisOperaciones = new JButton("Mis Operaciones");
         JButton btnCotizaciones = new JButton("Cotizaciones");
 
@@ -148,4 +158,106 @@ public class PanelMisActivos extends JPanel {
         gbc.gridx = 2;
         this.add(btnCotizaciones, gbc);
     }
+
+    // Métodos para exponer los botones al controlador
+    public JButton getBtnGenerarDatos() {
+        return btnGenerarDatos;
+    }
+
+    public JButton getBtnExportarCSV() {
+        return btnExportarCSV;
+    }
+
+    // Métodos específicos para cada acción
+    public void generarDatosDePrueba() {
+        // Simulando la lógica para generar los datos de prueba
+    	System.out.println("Generando datos de prueba...");
+        // Llamamos a la función para actualizar la tabla
+        if (actualizarTablaCriptos()) {
+            mostrarMensaje("Generación de datos de prueba exitosa.", "Éxito");
+        } else {
+            mostrarMensaje("Hubo un error al generar los datos de prueba.", "Error");
+        }
+    }
+
+    public void exportarComoCSV() {
+        // Simulando la lógica para exportar los datos
+        boolean exito = true; // Cambiar esta variable según la lógica real
+
+        if (exito) {
+            mostrarMensaje("Exportación a CSV exitosa.", "Éxito");
+        } else {
+            mostrarMensaje("Hubo un error al exportar los datos a CSV.", "Error");
+        }
+    }
+
+    // Método para mostrar los mensajes
+    private void mostrarMensaje(String mensaje, String tipo) {
+        int tipoMensaje = tipo.equals("Éxito") ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+        JOptionPane.showMessageDialog(this, mensaje, tipo, tipoMensaje);
+    }
+    
+    public boolean actualizarTablaCriptos() {
+    	ActivoDAOjdbc activoDAO = FactoryDAO.getActivoDAO();
+		MonedaDAOjdbc monedaDAO = FactoryDAO.getMonedaDAO();
+        // Llamamos a los métodos listarActivos y listarMonedas
+        List<Activo> listaActivos = activoDAO.listarActivos();  // Lista de activos (id_moneda, cantidad)
+        List<Moneda> listaMonedas = monedaDAO.listarMonedas();  // Lista de monedas (id, nombre, nombreIcono)
+
+        // Creamos una lista para almacenar las filas de la tabla
+        List<Object[]> datosTabla = new LinkedList<>();
+
+        // Iteramos sobre los activos
+        for (Activo activo : listaActivos) {
+            // Buscar la moneda correspondiente al id_moneda
+            Moneda moneda = buscarMonedaPorId(activo.getID_MONEDA(), listaMonedas);
+            
+            if (moneda != null) {
+                // Agregamos la fila con el icono, nombre de la moneda y la cantidad
+                datosTabla.add(new Object[]{
+                    new ImageIcon(new ImageIcon(moneda.getNombre_icono()).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)),  // Icono
+                    moneda.getNombre(),  // Nombre de la moneda
+                    activo.getCantidad()  // Cantidad del activo
+                });
+            }
+        }
+
+        // Convertimos la lista de filas a un array bidimensional
+        Object[][] datos = new Object[datosTabla.size()][3];
+        for (int i = 0; i < datosTabla.size(); i++) {
+            datos[i] = datosTabla.get(i);
+        }
+
+        // Establecemos los datos en el modelo de la tabla
+        String[] columnas = {"", "Cripto", "Monto"};
+        DefaultTableModel modelo = new DefaultTableModel(datos, columnas) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? ImageIcon.class : String.class;
+            }
+        };
+     // Establecer el modelo actualizado a la tabla
+        tablaCriptos.setModel(modelo);  // Actualizamos la tabla con el nuevo modelo
+
+        // Revalidamos para asegurarnos de que la tabla se actualiza correctamente
+        tablaCriptos.revalidate();
+        return true;
+        
+//        tablaCriptos.setModel(modelo);  // Actualizamos la tabla con el nuevo modelo
+//        tablaCriptos.revalidate();  // Revalidamos para asegurarnos de que la tabla se actualiza correctamente
+    }
+
+ // Método para buscar una moneda por su id
+    private Moneda buscarMonedaPorId(int idMoneda, List<Moneda> listaMonedas) {
+        // Iteramos sobre la lista de monedas
+        for (Moneda moneda : listaMonedas) {
+            // Si encontramos una moneda con el idMoneda correspondiente, la devolvemos
+            if (moneda.getID() == idMoneda) {
+                return moneda;
+            }
+        }
+        // Si no se encuentra la moneda con el id dado, devolvemos null
+        return null;
+    }
 }
+

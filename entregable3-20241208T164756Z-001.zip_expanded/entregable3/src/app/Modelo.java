@@ -48,13 +48,13 @@ public class Modelo {
 		valorMoneda = new CompValorMoneda();
 		NMCTMoneda = new CompNMCTMoneda();
 	
-		if(monedaDAO.isEmpty()) {
-			monedaDAO.guardarMoneda (new Cripto(".\\Logos\\Bitcoin_logo.png" , "BITCOIN","BTC",0, 0, 0));
-			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Ethereum_logo.png" , "ETHEREUM","ETH",0, 0, 0));
-			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Dogecoin_Logo.png" , "DOGECOIN","DOGE",0, 0, 0));
-			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Tether_logo.png" , "TETHER","USDT",0, 0, 0));
-			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Usdc_logo.png" , "USD-COIN","USDC",0, 0, 0));
-		}
+//		if(monedaDAO.isEmpty()) {
+//			monedaDAO.guardarMoneda (new Cripto(".\\Logos\\Bitcoin_logo.png" , "BITCOIN","BTC",0, 0, 0));
+//			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Ethereum_logo.png" , "ETHEREUM","ETH",0, 0, 0));
+//			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Dogecoin_Logo.png" , "DOGECOIN","DOGE",0, 0, 0));
+//			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Tether_logo.png" , "TETHER","USDT",0, 0, 0));
+//			monedaDAO.guardarMoneda(new Cripto(".\\Logos\\Usdc_logo.png" , "USD-COIN","USDC",0, 0, 0));
+//		}
 	}	
 	
 	public int crearMoneda(Moneda moneda) {
@@ -165,66 +165,66 @@ public class Modelo {
 		return lista;
 	}
 	
-	public Activo compraCripto (String fiatOrigenNMCT, String criptoDestinoNMCT, double cantidadFiat) {
-		Moneda fiat= monedaDAO.existeMoneda(fiatOrigenNMCT);
-		if(fiat == null) {
-			return (new Activo("_ERROR_", 1));  // La nomenclatura pasada como origen no existe.
-		}
-		if(!(fiat instanceof Fiat)) 
-			return (new Activo("_ERROR_", 2)); //La nomenclatura de origen no corresponde a un fiat.
-
-		Activo activoFiat= activoDAO.existeActivo(fiat);
-		
-		if(activoFiat == null)
-			return (new Activo("_ERROR_", 3)); //El activo fiat aun no existe.
-	
-		
-		Moneda cripto = monedaDAO.existeMoneda(criptoDestinoNMCT);
-		if(cripto == null)
-			return (new Activo("_ERROR_", 4)); //La moneda destino pasada no existe.
-		if(!(cripto instanceof Cripto)) 	
-			return (new Activo("_ERROR_", 5)); //La nomenclatura de destino no corresponde a un cripto		
-		
-		if(activoFiat.getCantidad() < cantidadFiat) {
-			return (new Activo("_ERROR_", 10)); //saldo fiat insuficiente al ingresado
-		}
-		
-		double cantidadCripto= fiat.convertir(cantidadFiat, cripto);
-		
-		Cripto criptoDestino = (Cripto) cripto;
-		if(criptoDestino.getStock() < cantidadCripto)
-			return (new Activo("_ERROR_", 11)); //stock insuficiente al requerido
-		
-		criptoDestino.setStock(criptoDestino.getStock() - cantidadCripto);
-		if(!monedaDAO.actualizarStock(criptoDestino))
-			return (new Activo("_ERROR_", 6));//error al actualizar stock de la criptomoneda.
-		
-		activoFiat.setCantidad(activoFiat.getCantidad() - cantidadFiat);
-		Activo activoCripto= activoDAO.existeActivo(criptoDestino);
-		if(activoCripto == null) {
-			activoCripto = new Activo(criptoDestino.getNomenclatura(), cantidadCripto);
-			if(!(activoDAO.crearActivo(activoCripto, cripto) && activoDAO.actualizarActivo(activoFiat, fiat)))
-				return (new Activo("_ERROR_", 7));
-		} 
-		  else {
-			activoCripto.setCantidad(activoCripto.getCantidad() + cantidadCripto);
-			if(!(activoDAO.actualizarActivo(activoCripto, cripto) && activoDAO.actualizarActivo(activoFiat, fiat)))
-				return (new Activo("_ERROR_", 7)); //error al actualizar los valores en los activos
-		}
-		LocalDateTime fecha= LocalDateTime.now();
-		
-		// Define el formato 
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-		// Convierte LocalDateTime a String 
-		String fechaString = fecha.format(formato);
-		
-		Transaccion compra = new Compra(fechaString, fiat.getNomenclatura(), criptoDestino.getNomenclatura(), cantidadFiat, cantidadCripto);
-		transaccionDAO.guardarTransaccion(compra);
-		Activo activoInfo= new Activo(cripto.getNomenclatura(), cantidadCripto);
-		return activoInfo; // funcion finalizo con exito
-							// devuelve el modificado para la impresion de resultados del mismo
-	}
+//	public Activo compraCripto (String fiatOrigenNMCT, String criptoDestinoNMCT, double cantidadFiat) {
+//		Moneda fiat= monedaDAO.existeMoneda(fiatOrigenNMCT);
+//		if(fiat == null) {
+//			return (new Activo("_ERROR_", 1));  // La nomenclatura pasada como origen no existe.
+//		}
+//		if(!(fiat instanceof Fiat)) 
+//			return (new Activo("_ERROR_", 2)); //La nomenclatura de origen no corresponde a un fiat.
+//
+//		Activo activoFiat= activoDAO.existeActivo(fiat);
+//		
+//		if(activoFiat == null)
+//			return (new Activo("_ERROR_", 3)); //El activo fiat aun no existe.
+//	
+//		
+//		Moneda cripto = monedaDAO.existeMoneda(criptoDestinoNMCT);
+//		if(cripto == null)
+//			return (new Activo("_ERROR_", 4)); //La moneda destino pasada no existe.
+//		if(!(cripto instanceof Cripto)) 	
+//			return (new Activo("_ERROR_", 5)); //La nomenclatura de destino no corresponde a un cripto		
+//		
+//		if(activoFiat.getCantidad() < cantidadFiat) {
+//			return (new Activo("_ERROR_", 10)); //saldo fiat insuficiente al ingresado
+//		}
+//		
+//		double cantidadCripto= fiat.convertir(cantidadFiat, cripto);
+//		
+//		Cripto criptoDestino = (Cripto) cripto;
+//		if(criptoDestino.getStock() < cantidadCripto)
+//			return (new Activo("_ERROR_", 11)); //stock insuficiente al requerido
+//		
+//		criptoDestino.setStock(criptoDestino.getStock() - cantidadCripto);
+//		if(!monedaDAO.actualizarStock(criptoDestino))
+//			return (new Activo("_ERROR_", 6));//error al actualizar stock de la criptomoneda.
+//		
+//		activoFiat.setCantidad(activoFiat.getCantidad() - cantidadFiat);
+//		Activo activoCripto= activoDAO.existeActivo(criptoDestino);
+//		if(activoCripto == null) {
+//			activoCripto = new Activo(criptoDestino.getNomenclatura(), cantidadCripto);
+//			if(!(activoDAO.crearActivo(activoCripto, cripto) && activoDAO.actualizarActivo(activoFiat, fiat)))
+//				return (new Activo("_ERROR_", 7));
+//		} 
+//		  else {
+//			activoCripto.setCantidad(activoCripto.getCantidad() + cantidadCripto);
+//			if(!(activoDAO.actualizarActivo(activoCripto, cripto) && activoDAO.actualizarActivo(activoFiat, fiat)))
+//				return (new Activo("_ERROR_", 7)); //error al actualizar los valores en los activos
+//		}
+//		LocalDateTime fecha= LocalDateTime.now();
+//		
+//		// Define el formato 
+//		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+//
+//		// Convierte LocalDateTime a String 
+//		String fechaString = fecha.format(formato);
+//		
+//		Transaccion compra = new Compra(fechaString, fiat.getNomenclatura(), criptoDestino.getNomenclatura(), cantidadFiat, cantidadCripto);
+//		transaccionDAO.guardarTransaccion(compra);
+//		Activo activoInfo= new Activo(cripto.getNomenclatura(), cantidadCripto);
+//		return activoInfo; // funcion finalizo con exito
+//							// devuelve el modificado para la impresion de resultados del mismo
+//	}
 	
 	public int realizarSwap(String criptoOrigenNMCT, double cantidadOrigen, String criptoDestinoNMCT) {
 		Moneda monedaOrigen = monedaDAO.existeMoneda(criptoOrigenNMCT);
